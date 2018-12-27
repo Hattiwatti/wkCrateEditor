@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include <algorithm>
 #include <fstream>
 #include <stdio.h>
@@ -84,11 +83,13 @@ static void readConfig(const char* sFileName)
     g_customEntries.emplace_back(weaponId, crateChance * 20);
   }
 
+#ifdef _DEBUG
   printf("Config from %s\n", sFileName);
   for (auto weaponEntry : g_customEntries)
     printf("WeaponID: %s\tChance: %d\n", WeaponStrings[weaponEntry.id], weaponEntry.chance);
 
   printf("\n\n");
+#endif // _DEBUG
 }
 
 ///////////////////////////////////////////////////////////////
@@ -99,11 +100,13 @@ static void __stdcall overrideCrateChances(WeaponEntryArray* pArray)
   if (g_customEntries.empty())
     return;
 
+#ifdef _DEBUG
   // print original list for debug
   for (int i = 0; i < pArray->size; ++i)
     printf("WeaponID: %s\tChance: %d\n", WeaponStrings[pArray->entries[i].id], pArray->entries[i].chance);
 
   printf("\n\n");
+#endif // _DEBUG
 
   pArray->size = g_customEntries.size();
   for (int i = 0; i < g_customEntries.size(); ++i)
@@ -132,7 +135,9 @@ static void __declspec(naked) hookFunc()
 
 void main()
 {
+#ifdef _DEBUG
   initConsole();
+#endif // _DEBUG
   readConfig("wkCrateEditor.ini");
 
   int hookAddress = reinterpret_cast<int>(&hookFunc);
